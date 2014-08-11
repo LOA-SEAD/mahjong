@@ -206,7 +206,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
 
 		cronometro.html('Cronometro: ' + minutos + ':' + ((segundos < 10) ? "0"+segundos : segundos));
 
-		barraCronometro.css('width', parseInt(148*tempo/900));
+		barraCronometro.css('width', parseInt(148 * tempo / Model.obterTempoDoNivel()));
 	}
 	
 	function fimDeJogoVitoria() {	
@@ -225,7 +225,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
 	function tratarImpossibilidade() {
 		var vetorDeNovasPosicoes = Model.fazerPossivel();
 
-		for(var i = 0; i < vetorDeNovasPosicoes.length; i++)
+		for ( var i = 0; i < vetorDeNovasPosicoes.length; i++ )
 		{
 			var idAtual = vetorDeNovasPosicoes[i].x0 + '-' + vetorDeNovasPosicoes[i].y0;
 			var idNovoX = vetorDeNovasPosicoes[i].x1;

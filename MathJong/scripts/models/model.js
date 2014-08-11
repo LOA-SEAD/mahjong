@@ -3,28 +3,32 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 	
 	var CUSTO_DA_DICA = 150,
 	PONTOS_POR_ACERTO = 50,
-	NIVEL_MAXIMO,
 	NUM_DE_LINHAS,
 	NUM_DE_COLUNAS,
 	matrizDePecas,
 	tempoRestante,
+	tempoDoNivel,
 	pontuacao = 0,
-	estadoDoJogo = "parado",//venceu, perdeu, impossivel, jogando, parado, pausado
+	estadoDoJogo = "parado", //venceu, perdeu, impossivel, jogando, parado, pausado
 	gravidadeLigada,
 	nivel = 0,
-	cronometro;	
+	cronometro;
+
+	/**
+	 * Essa função é chamada no começo do jogo é gera aleatoriamente a matriz com todas as peças do jogo
+	 */
 	function gerarNovaMatriz()
-	{		
-		//Essa função é chamada no começo do jogo é gera aleatoriamente a matriz com todas as peças do jogo
-		var tamanhoDoNivel = tabela.obterTamanhoDoNivel(nivel);
-		NUM_DE_LINHAS = tamanhoDoNivel[0];
-		NUM_DE_COLUNAS = tamanhoDoNivel[1];
+	{
+		NUM_DE_LINHAS  = tabela.obterTamanhoDoNivel(nivel)[0];
+		NUM_DE_COLUNAS = tabela.obterTamanhoDoNivel(nivel)[1];
+		
 		var i,j;
 		var vetorAuxiliarParaPegarTexto;
 		var vetorAuxiliarParaGerarMatrizAleatoria = new Array(NUM_DE_COLUNAS*NUM_DE_LINHAS);
 		var contador = 0;
 		var textosDoNivel = tabela.obterTexto(nivel);
 		var numeroDeGruposDoNivel = textosDoNivel.length;
+		
 		for(i=0;i<numeroDeGruposDoNivel;i++)
 		{
 			vetorAuxiliarParaPegarTexto = textosDoNivel[i];			
@@ -33,12 +37,13 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 				vetorAuxiliarParaGerarMatrizAleatoria[contador] = {grupo:i, texto:vetorAuxiliarParaPegarTexto[j]};
 				contador++;				
 			}
-		}			
+		}
+
 		matrizDePecas = new Array(NUM_DE_COLUNAS);
-		for(i=0;i<NUM_DE_LINHAS;i++)
+		for ( i = 0; i < NUM_DE_LINHAS; i++ )
 		{
 			matrizDePecas[i] = new Array(NUM_DE_LINHAS);
-			for(j=0;j<NUM_DE_COLUNAS;j++)
+			for( j = 0; j < NUM_DE_COLUNAS; j++ )
 			{
 				var aux = Math.floor(Math.random()*vetorAuxiliarParaGerarMatrizAleatoria.length);
 				var aux2 = vetorAuxiliarParaGerarMatrizAleatoria.splice(aux,1)[0];
@@ -46,22 +51,14 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 				var texto = aux2.texto;
 				
 				matrizDePecas[i][j] = {
-					pos:	[i,j],
-					id:		i*NUM_DE_LINHAS+j,
+					pos:	[i, j],
+					id:		i * NUM_DE_LINHAS + j,
 					valor:	grupo,
 					texto:	texto
 				};
-				
-				//Forçar a matriz
-				/*matrizDePecas[i][j] = {
-					pos:	[i,j],
-					id:		i*NUM_DE_LINHAS+j,
-					valor:	1,
-					texto:	1
-				};*/
 			}
-		}		
-	}	
+		}
+	}
 	function validarLigacao(peca1, peca2, trocarCaminho)
 	{
 		//Essa função é chamada para checar se as duas peças se ligam
@@ -93,7 +90,7 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 		
 		if(checarFimPorVitoria())
 		{
-			if(nivel >= 2)
+			if(nivel >= tabela.obterNumeroDeNiveis())
 			{
 				estadoDoJogo = 'finalizado';
 			}
@@ -130,19 +127,20 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 			pos[1]--;
 		}				
 	}
+
+	/**
+	 * Searches for pieces in the matrix.
+	 *
+	 * @return @true if matrix is empty. @false, otherwise.
+	 */
 	function matrizVazia()
 	{
-		var i,j;
-		var vazia = true;
-		for(i=0;i<NUM_DE_COLUNAS;i++)
-			for(j=0;j<NUM_DE_LINHAS;j++)
-				if(matrizDePecas[i][j] != null)
-				{
-					vazia = false;
-					break;
-				}
+		for( var i = 0; i < NUM_DE_LINHAS; i++ )
+			for( var j = 0; j < NUM_DE_COLUNAS; j++ )
+				if(matrizDePecas[i][j])
+					return false;
 				
-		return vazia;
+		return true;
 	}
 	function resetarPontuacao()
 	{
@@ -155,9 +153,14 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 	{
 		pontuacao += valor;
 	}
+
+	/**
+	 * Obtains maximum time to finish current level.
+	 *
+	 */
 	function resetarCronometro()
 	{
-		tempoRestante = 900; //15 minutos = 900 segundos
+		tempoRestante = tempoDoNivel = tabela.obterTempo(nivel);
 	}
 	function atualizar()
 	{
@@ -234,16 +237,16 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 		var vetorPecas = new Array();
 		var vetorMudancas = new Array();
 			
-		for(i=0;i<NUM_DE_COLUNAS;i++)
-			for(j=0;j<NUM_DE_LINHAS;j++)
-				if(matrizDePecas[i][j] != null)
+		for ( i = 0; i < NUM_DE_LINHAS; i++ )
+			for ( j = 0; j < NUM_DE_COLUNAS; j++ )
+				if ( matrizDePecas[i][j] != null )
 				{
 					vetorPos.push([i,j]);
 					vetorPecas.push(matrizDePecas[i].splice(j,1,null)[0]);
 				}
 				
 		
-		for(i=0;i<vetorPos.length;i++)
+		for ( i = 0; i < vetorPos.length; i++ )
 		{
 			var x = vetorPos[i][0];
 			var y = vetorPos[i][1];
@@ -284,12 +287,16 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 				cronometro = setInterval(atualizar, 1000);				
 			}
 		},
+		obterNivel: function()
+		{
+			return nivel;
+		},
 		proximoNivel:function()
 		{
 			clearInterval(cronometro);
 			estadoDoJogo = "parado";
 			
-			if(nivel<NIVEL_MAXIMO)
+			if(nivel<tabela.obterNumeroDeNiveis())
 			{
 				nivel++;
 			}
@@ -346,7 +353,10 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 				return false;
 			}
 		},
-
+		obterTempoDoNivel: function()
+		{
+			return tempoDoNivel;
+		},
 		obterTempoRestante:function()
 		{
 			return tempoRestante;
