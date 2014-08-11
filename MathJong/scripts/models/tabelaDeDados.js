@@ -106,11 +106,15 @@ define(function()
         ]
     )
 
-    // To add new levels, make a call for the @method AddLevel(size, time, data), like the example below:
+    // To add new levels, make a call for the @method AddLevel(size, time, data).
+    // The example below illustrates this:
     // AddLevel(
-    //     [1, 2],
+    //     [2, 3],
     //     900,
-    //     [[ "50", "25 + 40" ]]
+    //     [
+    //         [ "10", "5 + 5" ],
+    //         [ "20", "2 * 10" ]
+    //     ]
     // )
     
     return {
@@ -120,7 +124,4 @@ define(function()
         obterTamanhoDoNivel: GetSize,
         obterNumeroDeNiveis: GetNumberOfLevels
     }
-})    
-    
-    
-    
+})
