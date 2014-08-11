@@ -424,7 +424,9 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
 			case 8:
 				$('#botaoSom').removeClass('circulado');
 				break;
-			case 9:
+			// case 9:
+			// 	break;
+			case 11:
 				jogo.hide();
 				tutorial.hide();
 				menu.fadeIn();
