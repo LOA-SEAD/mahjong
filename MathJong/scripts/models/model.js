@@ -200,16 +200,16 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 	{
 		//algoritmo de checagem de combinação
 		var i,j,x,y;
-		for(i=0;i<NUM_DE_LINHAS;i++)
+		for ( i = NUM_DE_LINHAS -1; i >=0; i-- )
 		{
-			for(j=0;j<NUM_DE_COLUNAS;j++)
+			for ( j = NUM_DE_COLUNAS -1; j >=0; j-- )
 			{
 				if(matrizDePecas[i][j] == null)
 					continue;
 				else
 				{
-					for(x=0;x<NUM_DE_LINHAS;x++)
-						for(y=0;y<NUM_DE_COLUNAS;y++)
+					for ( x = NUM_DE_LINHAS -1; x >= 0; x-- )
+						for ( y = NUM_DE_COLUNAS -1; y >= 0; y-- )
 						{
 							if(matrizDePecas[x][y] == null || matrizDePecas[i][j] == matrizDePecas[x][y])
 								continue;
@@ -390,8 +390,7 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 		},
 		ajustarGravidade:function(valor)
 		{
-			if(estadoDoJogo == "parado")
-				gravidadeLigada = valor;
+			gravidadeLigada = valor;
 		},	
 		obterGravidade: function()
 		{

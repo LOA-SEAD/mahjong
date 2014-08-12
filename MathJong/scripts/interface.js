@@ -384,19 +384,29 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
 
 	function proximoTutorial() {
 		Tutorial.tutorialAtual++;
-		textoTutorial.html(Tutorial.texto[Tutorial.tutorialAtual]);
+		
+		textoTutorial
+			.fadeOut(500)
+			.slideUp(500, function() {
+				$(this)
+					.hide()
+					.html(Tutorial.texto[Tutorial.tutorialAtual])
+					.slideDown(500)
+					.fadeIn(500)
+			})
+			
+
 		pecas = Model.checarPossivelLigacao();
 
 		switch(Tutorial.tutorialAtual)
 		{
 			case 1:
-
 				pecas = Model.checarPossivelLigacao();
 				setTimeout(function() {
 					Model.continuarCronometro();
 					selecionarPeca($('#'+pecas[0].pos[0]+'-'+pecas[0].pos[1]));
 					Model.pausarCronometro();
-				}, 1000);				
+				}, 1000);			
 				break;
 			case 2:
 				pecas = Model.checarPossivelLigacao();
@@ -423,9 +433,20 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
 				break;
 			case 8:
 				$('#botaoSom').removeClass('circulado');
+				pecas = Model.checarPossivelLigacao();
+				Model.continuarCronometro();
+				selecionarPeca($('#'+pecas[0].pos[0]+'-'+pecas[0].pos[1]));
+				selecionarPeca($('#'+pecas[1].pos[0]+'-'+pecas[1].pos[1]));
+				Model.pausarCronometro();
 				break;
-			// case 9:
-			// 	break;
+			case 9:
+				Model.ajustarGravidade(false);
+				pecas = Model.checarPossivelLigacao();
+				Model.continuarCronometro();
+				selecionarPeca($('#'+pecas[0].pos[0]+'-'+pecas[0].pos[1]));
+				selecionarPeca($('#'+pecas[1].pos[0]+'-'+pecas[1].pos[1]));
+				Model.pausarCronometro();
+			 	break;
 			case 11:
 				jogo.hide();
 				tutorial.hide();
