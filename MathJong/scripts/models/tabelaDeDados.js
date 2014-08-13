@@ -1,6 +1,6 @@
 define(function() 
 {
-    var  levels = []
+    var  levels = [];
 
     function GetSize(level) { return levels[level].size }
     function GetTime(level) { return levels[level].time }
@@ -13,26 +13,27 @@ define(function()
             size: size,
             time: time,
             data: data
-        })
+        });
 
-        return levels[levels.length -1]
+        return levels[levels.length -1];
     }
 
     function raiz(valor, b)
     {
         return ! b || b == 2
-        ? '&radic,<span style="text-decoration:overline,">&nbsp,' + valor + '&nbsp,</span>'
-        : '<sup>' + b + '</sup>&radic,<span style="text-decoration:overline,">&nbsp,' + valor + '&nbsp,</span>'
+        ? '&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
+        : '<sup>' + b + '</sup>&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
+        ;
     }
 
     function elev(valor)
     {
-        return '<sup>' + valor + '</sup>'
+        return '<sup>' + valor + '</sup>';
     }
 
     function log(a, b)
     {
-        return 'log<sub>' + a + '</sub>' + b
+        return 'log<sub>' + a + '</sub>' + b;
     }
 
     AddLevel(
@@ -43,7 +44,7 @@ define(function()
             ["7+8",     "15", "10+5", "-10+25"],
             ["7+4", "10+7-6",   "11",  "21-10"]
         ]
-    )
+    );
 
     AddLevel(
         [4, 4],
@@ -54,7 +55,7 @@ define(function()
             [   "23-5", "6+4+7",     "17", "25-8"],
             [  "40-12", "14+14", "40-8-4",   "28"]
         ]
-    )
+    );
 
     AddLevel(
         [4, 5],
@@ -66,7 +67,7 @@ define(function()
             [ "5+5", "2+3+5",   "2*5",   "7+3"],
             ["10+3",   "7+6", "2*6+1",  "20-7"]
         ]
-    )
+    );
 
     AddLevel(
         [4, 6],
@@ -79,7 +80,8 @@ define(function()
             ["8*2", "4*4", "3*5+1", "32-16"],
             ["5*5+2", "23+4", "4*5+7", "21+6"]
         ]
-    )
+    );
+
 
     AddLevel(
         [5, 6],
@@ -91,7 +93,7 @@ define(function()
             ["11*2", "19+3", "5*5-3", "14+8", "19+3", "32-6-4"],
             ["48/2", "30-6", "12*2", "8*3", "4*6", "32-8"]
         ]
-    )
+    );
 
     AddLevel(
         [6, 6],
@@ -104,7 +106,7 @@ define(function()
             ["21*2", "50-8", "52-9+1", "6*7", "7*7-7", "45-3"],
             ["27*2", "25*2+4", "2*5*5+4", "21+33", "8*8-2*5", "72-8"]
         ]
-    )
+    );
 
     // To add new levels, make a call for the @method AddLevel(size, time, data).
     // The example below illustrates this:
@@ -123,5 +125,5 @@ define(function()
         obterTempo: GetTime,
         obterTamanhoDoNivel: GetSize,
         obterNumeroDeNiveis: GetNumberOfLevels
-    }
-})
+    };
+});
