@@ -386,15 +386,13 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
 		Tutorial.tutorialAtual++;
 		
 		textoTutorial
-			.fadeOut(500)
-			.slideUp(500, function() {
+			.fadeOut(500, function() {
 				$(this)
 					.hide()
 					.html(Tutorial.texto[Tutorial.tutorialAtual])
 					.slideDown(500)
 					.fadeIn(500)
 			})
-			
 
 		pecas = Model.checarPossivelLigacao();
 
@@ -595,7 +593,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
 			Model.proximoNivel();
 			iniciarJogo(Model.obterGravidade());
 		});
-	}	
+	}
 	
 	function configurarCamadaDerrota() {
 		derrota.click(function(){

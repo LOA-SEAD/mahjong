@@ -30,7 +30,7 @@
 
         iniciarSom: function () {
             if (efeitoDeSom !== undefined);
-                //efeitoDeSom.play();
+                efeitoDeSom.play();
         },
 		
 		pausarSom: function() {

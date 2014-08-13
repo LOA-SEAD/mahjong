@@ -139,7 +139,7 @@ define(["./checagemLigacao2", "./tabelaDeDados"], function (checagem, tabela)
 			for( var j = 0; j < NUM_DE_COLUNAS; j++ )
 				if(matrizDePecas[i][j])
 					return false;
-				
+
 		return true;
 	}
 	function resetarPontuacao()
