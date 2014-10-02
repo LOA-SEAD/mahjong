@@ -107,7 +107,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
 					$('<div>')
 					.attr({ 'id': i + '-' + j, 'class': 'peca'})
 					.css({ 'top': i*36 + alturaQueSobraEmCima, 'left': j*66 + larguraQueSobraADireita })
-					.html(matriz[i][j].texto)
+					.html('<math>' + matriz[i][j].texto + '</math>')
 					.click(function() {
 						selecionarPeca($(this));									
 					})
