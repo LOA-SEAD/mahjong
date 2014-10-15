@@ -20,10 +20,17 @@ define(function()
 
     function raiz(valor, b)
     {
+if (jQuery.browser.webkit){
+return ! b || b == 2
+        ? '&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
+        : '<sup>' + b + '</sup>&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
+        ;
+} else {
         return ! b || b == 2
         ? '<msqrt> <mi>'+valor+'</mi> </msqrt>'
         : '<mroot><mrow><mi>' + valor + '</mi></mrow><mn>' + b + '</mn></mroot>';
     }
+}
 
     function elev(a,b)
     {
@@ -61,7 +68,7 @@ define(function()
         [
             [ "1+1",   "5-3", "2*1", "8/4"],
             [ "3+2", "2*3-1", "25/5", elev(5,1)],
-            [ "5+2",   "49/7",  "10-3",   raiz("4 + 45")],
+            [ "5+2",   "49/7",  "10-3",   raiz(49)],
             [ raiz(100), "15-5",   "2*5",   "40/4"],
             ["39/13",   "7+6", "2*6+1",  "20-7"]
         ]
