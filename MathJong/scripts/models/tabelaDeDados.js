@@ -34,7 +34,12 @@ return ! b || b == 2
 
     function elev(a,b)
     {
-        return '<msup> <mi>'+ a + '</mi> <mn>' + b + '</mn> </msup>'
+	if (jQuery.browser.webkit){
+	return a + '<sup>'+b+'</sup>';
+        }
+        else {
+        return '<msup> <mi>'+ a + '</mi> <mn>' + b + '</mn> </msup>';
+        }
     }
 
     function log(a, b)
