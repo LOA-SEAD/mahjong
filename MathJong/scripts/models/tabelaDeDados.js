@@ -5,7 +5,7 @@ define(function()
     function GetSize(level) { return levels[level].size }
     function GetTime(level) { return levels[level].time }
     function GetData(level) { return levels[level].data }
-    function GetNumberOfLevels() { return levels.length }
+    function GetNumberOfLevels() { return levels.length - 1}
 
     function AddLevel(size, time, data)
     {
