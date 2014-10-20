@@ -185,6 +185,19 @@ body {
 	text-align: center;
 }
 
+#niveis {
+	position: absolute;
+	background: url("../imgs/fundoTexto.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	left: 200px;
+	top: 20px;
+	padding-top: 12px;
+	width: 172px;
+	height: 30px;
+	text-align: center;
+}
+
 #jogar.botaoMenu {
 	top: 400px;
 	left: 200px;

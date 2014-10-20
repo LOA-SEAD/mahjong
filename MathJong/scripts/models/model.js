@@ -290,7 +290,10 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 		obterNivel: function()
 		{
 			return nivel;
-		}, 
+		},
+		obterNumeroDeNiveis: function() {
+			return tabela.obterNumeroDeNiveis();
+		},
 		proximoNivel:function()
 		{
 			clearInterval(cronometro);
@@ -304,7 +307,7 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 			{
 				estadoDoJogo = "finalizado";
 			}
-		}, 
+		},
 		fazerPossivel:function()
 		{
 			if(estadoDoJogo == "impossivel")
