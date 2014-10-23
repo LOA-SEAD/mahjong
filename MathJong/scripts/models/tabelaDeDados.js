@@ -1,6 +1,8 @@
 define(function() 
 {
-    var  levels = [];
+	var hasMathMLSupport;
+	
+    var levels = [];
 
     function GetSize(level) { return levels[level].size }
     function GetTime(level) { return levels[level].time }
@@ -17,10 +19,27 @@ define(function()
 
         return levels[levels.length -1];
     }
-
+    
+    function hasMathMLSupport() {
+		
+		var div = document.getElementById("#myDiv")
+		
+		if (div == null) {
+			div = document.createElement("div");
+			div.id = "#myDiv";
+		}
+		
+		
+		div.innerHTML = "<math><mspace height='23px' width='77px'/></math>";
+		document.body.appendChild(div);
+		var box = div.firstChild.firstChild.getBoundingClientRect();	
+		return Math.abs(box.height - 23) <= 1  && Math.abs(box.width - 77) <= 1;
+	}
+	
     function raiz(valor, b)
     {
-if (jQuery.browser.webkit){
+		
+if (!hasMathMLSupport()){
 return ! b || b == 2
         ? '&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
         : '<sup>' + b + '</sup>&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
@@ -34,7 +53,7 @@ return ! b || b == 2
 
     function elev(a,b)
     {
-	if (jQuery.browser.webkit){
+	if (!hasMathMLSupport()){
 	return a + '<sup>'+b+'</sup>';
         }
         else {
