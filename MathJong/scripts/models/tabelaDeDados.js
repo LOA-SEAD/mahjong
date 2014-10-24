@@ -1,9 +1,7 @@
 define(function() 
 {
-	var hasMathMLSupport;
-	
     var levels = [];
-
+    
     function GetSize(level) { return levels[level].size }
     function GetTime(level) { return levels[level].time }
     function GetData(level) { return levels[level].data }
@@ -23,41 +21,41 @@ define(function()
     function hasMathMLSupport() {
 		
 		var div = document.getElementById("#myDiv")
-		
-		if (div == null) {
-			div = document.createElement("div");
-			div.id = "#myDiv";
-		}
-		
-		
+		div = document.createElement("div");
+		div.id = "#myDiv";
 		div.innerHTML = "<math><mspace height='23px' width='77px'/></math>";
 		document.body.appendChild(div);
-		var box = div.firstChild.firstChild.getBoundingClientRect();	
-		return Math.abs(box.height - 23) <= 1  && Math.abs(box.width - 77) <= 1;
+		var box = div.firstChild.firstChild.getBoundingClientRect();
+		var mathMLSupport = Math.abs(box.height - 23) <= 1  && Math.abs(box.width - 77) <= 1;
+		if(mathMLSupport)
+			hasMathMLSupport = function(){return true};
+		else
+			hasMathMLSupport = function(){return false};
+		$("#myDiv").remove();
+		return mathMLSupport;
 	}
 	
     function raiz(valor, b)
     {
 		
-if (!hasMathMLSupport()){
-return ! b || b == 2
-        ? '&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
-        : '<sup>' + b + '</sup>&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
-        ;
-} else {
-        return ! b || b == 2
-        ? '<msqrt> <mi>'+valor+'</mi> </msqrt>'
-        : '<mroot><mrow><mi>' + valor + '</mi></mrow><mn>' + b + '</mn></mroot>';
-    }
-}
+		if (!hasMathMLSupport()){
+			return ! b || b == 2
+			? '&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
+			: '<sup>' + b + '</sup>&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>';
+		} else {
+			return ! b || b == 2
+			? '<msqrt> <mi>'+valor+'</mi> </msqrt>'
+			: '<mroot><mrow><mi>' + valor + '</mi></mrow><mn>' + b + '</mn></mroot>';
+		}
+	}
 
     function elev(a,b)
     {
-	if (!hasMathMLSupport()){
-	return a + '<sup>'+b+'</sup>';
+		if (!hasMathMLSupport()){
+			return a + '<sup>'+b+'</sup>';
         }
-        else {
-        return '<msup> <mi>'+ a + '</mi> <mn>' + b + '</mn> </msup>';
+		else {
+			return '<msup> <mi>'+ a + '</mi> <mn>' + b + '</mn> </msup>';
         }
     }
 
@@ -65,6 +63,7 @@ return ! b || b == 2
     {
         return 'log<sub>' + a + '</sub>' + b;
     }
+    
     AddLevel(
         [3, 4],
         180,
@@ -98,7 +97,7 @@ return ! b || b == 2
         ]
     );
 
-AddLevel(
+	AddLevel(
         [4, 6],
         480,
         [
@@ -111,7 +110,7 @@ AddLevel(
         ]
     );
     
-AddLevel(
+	AddLevel(
         [5, 6],
         720,
         [
