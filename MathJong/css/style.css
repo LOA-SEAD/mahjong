@@ -92,11 +92,11 @@ body {
 
 .peca {
 	color: #555;
-	font-size: 1.1em;
+	font-size: 0.7em;
 	text-align: center;
 	position: absolute;
-	width: 66px;
-	height: 36px;
+	width: 110px;
+	height: 55px;
 	/*background: #eee;
 	border:1px solid #ddd;*/
 	background-image: url("../imgs/peca.png");
@@ -353,11 +353,11 @@ body {
 
 .linha-vertical {
 	width: 2px;
-	height: 36px;
+	height: 55px; /* altura da peça */
 }
 
 .linha-horizontal {
-	width: 66px;
+	width: 112px; /* largura da peça + 2 */
 	height: 2px;
 }
 

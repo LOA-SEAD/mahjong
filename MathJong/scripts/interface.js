@@ -23,6 +23,8 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
     cronometro,
     nivelAtual, nivelTotal,
     barraCronometro,
+    largura = 110, /* largura da peça */
+    altura = 54,   /* altura da peça */
     mudo = true;
     
     function criarLayout() {
@@ -96,8 +98,8 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         var alturaDaAreaDasPecas = parseInt(areaDasPecas.css('height'));
         var larguraDaAreaDasPecas = parseInt(areaDasPecas.css('width'));
         
-        var alturaNecessariaParaPecas = 36*Model.obterNumeroDeLinhas();
-        var larguraNecessariaParaPecas = 66*Model.obterNumeroDeColunas();
+        var alturaNecessariaParaPecas = altura * Model.obterNumeroDeLinhas();
+        var larguraNecessariaParaPecas = largura * Model.obterNumeroDeColunas();
         
         alturaQueSobraEmCima = (alturaDaAreaDasPecas - alturaNecessariaParaPecas)/2;
         larguraQueSobraADireita = (larguraDaAreaDasPecas - larguraNecessariaParaPecas)/2;
@@ -108,17 +110,19 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
             {
                 if(matriz[i][j] != null)
                 {    
-                    $('<div>')
-                    .attr({ 'id': i + '-' + j, 'class': 'peca'})
-                    .css({ 'top': i*36 + alturaQueSobraEmCima, 'left': j*66 + larguraQueSobraADireita })
-                    .html('<math>' + matriz[i][j].texto + '</math>')
-                    .click(function() {
-                        selecionarPeca($(this));                                    
-                    })
-                    .appendTo(areaDasPecas);
+                $('<div>')
+                            .attr({'id': i + '-' + j, 'class': 'peca'})
+                            .css({ 'top': i * altura + alturaQueSobraEmCima, 'left': j * largura + larguraQueSobraADireita })
+                            .html('<div>' + matriz[i][j].texto + '</div>')
+                            .click(function () {
+                                selecionarPeca($(this));
+                            })
+                            .appendTo(areaDasPecas);
+
                 }
             }
         }
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
     }
     
     function atualizar() {
@@ -179,7 +183,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         //console.log('derrubou peca da linha: '+ linha+ ' e da coluna: '+coluna);
         elemento = $('#'+linha+'-'+coluna);        
         linha = parseInt(linha) + parseInt(velocidade);
-        elemento.attr('id', linha+'-'+coluna).css('top', linha*36 + alturaQueSobraEmCima);
+        elemento.attr('id', linha+'-'+coluna).css('top', linha * altura + alturaQueSobraEmCima);
     }
     
     function atualizarPontuacao() {
@@ -243,7 +247,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
             var idNovoX = vetorDeNovasPosicoes[i].x1;
             var idNovoY = vetorDeNovasPosicoes[i].y1;
 
-            $('#' + idAtual).attr('id',  idNovoX+'--'+idNovoY).css({ 'top': idNovoX*36 + alturaQueSobraEmCima, 'left': idNovoY*66 + larguraQueSobraADireita });
+            $('#' + idAtual).attr('id',  idNovoX+'--'+idNovoY).css({ 'top': idNovoX * altura + alturaQueSobraEmCima, 'left': idNovoY * largura + larguraQueSobraADireita });
         }
 
         $('.peca').each(function(){
@@ -330,19 +334,22 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         var classeL, topL, leftL;
         var caminho = Model.obterCaminho();
 
+console.log(caminho)
+console.log(posicaoBase)
+
         for(var i = 1; i < caminho.length; i++)
         {
             if(caminho[i-1].x == caminho[i].x)
             {
                 classe = "linha-horizontal";
-                topL = posicaoBase.top - 18 + caminho[i].x*36;
-                leftL = posicaoBase.left - 66 + 66*(caminho[i].y+caminho[i-1].y)/2;
+                topL = posicaoBase.top - altura/2 + caminho[i].x * altura;
+                leftL = posicaoBase.left - largura + largura * (caminho[i].y+caminho[i-1].y)/2;
             }
             else
             {
                 classe = "linha-vertical";
-                topL =    posicaoBase.top - 36 + 36*(caminho[i].x+caminho[i-1].x)/2; 
-                leftL = posicaoBase.left - 33 + caminho[i].y*66;
+                topL =    posicaoBase.top - altura + altura * (caminho[i].x+caminho[i-1].x)/2; 
+                leftL = posicaoBase.left - largura/2 + caminho[i].y * largura;
             }
 
             $('<div>')
