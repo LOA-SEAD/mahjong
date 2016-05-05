@@ -55,7 +55,7 @@ define(function()
 
     function readJSON() {
         $.ajax({
-            url: "MathJong/json/fases.json",
+            url: "MahJong/json/fases.json",
             //force to handle it as text
             dataType: "text",
             mimeType: "application/json",

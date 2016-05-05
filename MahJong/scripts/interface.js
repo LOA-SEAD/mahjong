@@ -193,7 +193,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         {
             if(dicaDesabilitada)
                 //Habilitamos o botao da dica
-                botaoDica.css('background-image', 'url("MathJong/imgs/botaoDica.png")');
+                botaoDica.css('background-image', 'url("MahJong/imgs/botaoDica.png")');
 
             dicaDesabilitada = false;
         }
@@ -201,7 +201,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         {
             if(!dicaDesabilitada)
                 //Desabilitamos o botao dica
-                botaoDica.css('background-image', 'url("MathJong/imgs/botaoDicaDesabilitado.png")');
+                botaoDica.css('background-image', 'url("MahJong/imgs/botaoDicaDesabilitado.png")');
 
             dicaDesabilitada = true;
         }
@@ -572,15 +572,15 @@ console.log(posicaoBase)
     //Configuracoes do controle de som
     function configurarSomBotaoSom() {
         $('#botaoSom')
-        .css('background', 'url("MathJong/imgs/botaoSom.png")')
+        .css('background', 'url("MahJong/imgs/botaoSom.png")')
         .click(function(){
                 mudo = !mudo;
                 if(mudo) {
-                        $(this).css('background', 'url("MathJong/imgs/botaoSemSom.png")');
+                        $(this).css('background', 'url("MahJong/imgs/botaoSemSom.png")');
                         Audio.pausarSom();
                 }
                 else {
-                        $(this).css('background', 'url("MathJong/imgs/botaoSom.png")');
+                        $(this).css('background', 'url("MahJong/imgs/botaoSom.png")');
                         Audio.iniciarSom();
                 }
                         

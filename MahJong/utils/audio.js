@@ -1,6 +1,6 @@
 ﻿define(function () {
 
-    var som = 'MathJong/audio/loop',
+    var som = 'MahJong/audio/loop',
 
     efeitoDeSom;
 

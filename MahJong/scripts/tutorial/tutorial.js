@@ -11,8 +11,8 @@ define({
 		"Se precisar relembrar alguns conteúdos clique em Lembrete.",
 		"Você terá alguns minutos para realizar esta etapa. O tempo será mostrado no cronometro.",
 		"Caso queira retirar o som, clique na nota musical.",
-		"<img src=\"MathJong/imgs/botaoComGravidade.png\" /> Quando jogando com gravidade, as peças cairão conforme suas bases forem removidas.",
-		"<img src=\"MathJong/imgs/botaoSemGravidade.png\" /> Jogando sem gravidade, as peças permanecerão em suas posições originais.",
+		"<img src=\"MahJong/imgs/botaoComGravidade.png\" /> Quando jogando com gravidade, as peças cairão conforme suas bases forem removidas.",
+		"<img src=\"MahJong/imgs/botaoSemGravidade.png\" /> Jogando sem gravidade, as peças permanecerão em suas posições originais.",
 		"Boa Sorte!!!",
 	]
 });
