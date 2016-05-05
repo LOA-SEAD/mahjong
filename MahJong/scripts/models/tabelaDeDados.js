@@ -15,31 +15,6 @@ define(function()
         return levels.length - 1;
     }
 
-    function raiz(valor, b)
-    {
-
-        if (!hasMathMLSupport()) {
-            return !b || b === 2
-                    ? '&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>'
-                    : '<sup>' + b + '</sup>&radic;<span style="text-decoration:overline,">&nbsp;' + valor + '&nbsp;</span>';
-        } else {
-            return !b || b === 2
-                    ? '<msqrt> <mi>' + valor + '</mi> </msqrt>'
-                    : '<mroot><mrow><mi>' + valor + '</mi></mrow><mn>' + b + '</mn></mroot>';
-        }
-    }
-
-    function elev(a, b)
-    {
-        if (!hasMathMLSupport()) {
-            return a + '<sup>' + b + '</sup>';
-        }
-        else {
-            return '<msup> <mi>' + a + '</mi> <mn>' + b + '</mn> </msup>';
-        }
-    }
-    ;
-
     function AddLevel(size, time, data)
     {
         levels.push({
@@ -68,57 +43,6 @@ define(function()
                 //let's display a few items
 
                 for (i = 0; i < fases.length; i++) {
-
-                    for (j = 0; j < fases[i].linha; j++)
-                        for (k = 0; k < fases[i].coluna; k++) {
-                            var str = "";
-                            var index = 0;
-                            while (index < fases[i].data[j][k].length) {
-                                if (fases[i].data[j][k][index] === '!') {
-                                    index = index + 5;
-                                    var param1 = "";
-                                    while (fases[i].data[j][k][index] !== ')'
-                                            && fases[i].data[j][k][index] !== ',') {
-                                        param1 += fases[i].data[j][k][index++];
-                                    }
-                                    var param2 = "";
-                                    if (fases[i].data[j][k][index] === ')') {
-                                        param2 = 2;
-                                    } else {
-                                        index++;
-                                        while (fases[i].data[j][k][index] !== ')') {
-                                            param2 += fases[i].data[j][k][index++];
-                                        }
-                                    }
-                                    str += raiz(param1, param2);
-                                    index++;
-                                } else if (fases[i].data[j][k][index] === '@') {
-                                    index = index + 5;
-                                    var param1 = "";
-                                    while (fases[i].data[j][k][index] !== ')'
-                                            && fases[i].data[j][k][index] !== ',') {
-                                        param1 += fases[i].data[j][k][index++];
-                                    }
-                                    var param2 = "";
-                                    if (fases[i].data[j][k][index] === ')') {
-                                        param2 = 2;
-                                    } else {
-                                        index++;
-                                        while (fases[i].data[j][k][index] !== ')') {
-                                            param2 += fases[i].data[j][k][index++];
-                                        }
-                                    }
-                                    str += elev(param1, param2);
-                                    index++;
-                                } else {
-                                    str += fases[i].data[j][k][index++];
-                                }
-
-                            }
-
-                            fases[i].data[j][k] = str;
-                        }
-
                     AddLevel([fases[i].linha, fases[i].coluna], fases[i].time, fases[i].data);
                 }
             }
