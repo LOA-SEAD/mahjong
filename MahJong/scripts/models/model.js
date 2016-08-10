@@ -98,6 +98,7 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 			}
 			else
 			{
+				vitoria = true;
 				estadoDoJogo = "venceu";
 			}
 			clearInterval(cronometro);
@@ -180,6 +181,7 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 		//O jogo acaba quando n�o existem mais pe�as em jogo,  n�o existem mais liga��es ou o tempo acabou
 		if(checarFimPorTempo())
 		{
+			vitoria = false;
 			estadoDoJogo = "perdeu";
 			vitoria = false;
 			clearInterval(cronometro);
