@@ -1,36 +1,36 @@
-define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './models/model', './tutorial/tutorial'], function ($, Ui, Audio, Layout, Model, Tutorial) {
+define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './models/model', './tutorial/tutorial', './models/tabelaDeDados'], function ($, Ui, Audio, Layout, Model, Tutorial, tabela) {
 
     var menu,
-    menuPrincipal,
-    menuGravidade,
-    jogo,
-    creditos,
-    derrota,
-    vitoria,
-    tutorial,
-    finalDeJogo,
-    areaDasPecas,
-    invervaloDeAtualizacao,
-    pontuacao,
-    botaoDica,
-    controleSom,
-    textoTutorial,
-    posicaoBase,
-    dicaDesabilitada = true,
-    alturaQueSobraEmCima,
-    larguraQueSobraADireita,
-    volume = 50,
-    cronometro,
-    nivelAtual, nivelTotal,
-    barraCronometro,
-    largura = 110, /* largura da peça */
-    altura = 54,   /* altura da peça */
-    mudo = true;
-    
+        menuPrincipal,
+        menuGravidade,
+        jogo,
+        creditos,
+        derrota,
+        vitoria,
+        tutorial,
+        finalDeJogo,
+        areaDasPecas,
+        invervaloDeAtualizacao,
+        pontuacao,
+        botaoDica,
+        controleSom,
+        textoTutorial,
+        posicaoBase,
+        dicaDesabilitada = true,
+        alturaQueSobraEmCima,
+        larguraQueSobraADireita,
+        volume = 50,
+        cronometro,
+        nivelAtual, nivelTotal,
+        barraCronometro,
+        largura = 110, /* largura da peça */
+        altura = 54,   /* altura da peça */
+        mudo = true;
+
     function criarLayout() {
         $('body').append(Layout);
     }
-    
+
     function obterElementos() {
         menu            = $('#menu');
         menuPrincipal   = $('#principal.camada');
@@ -50,9 +50,9 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         controleSom     = $('#controleDeSom');
         textoTutorial   = $('#textoTutorial');
         tutorial        = $('#tutorial.camada');
-    }    
-    
-    function configuraEventos() {    
+    }
+
+    function configuraEventos() {
         configurarMenuBotaoJogar();
         configurarMenuBotaoCreditos();
         configurarMenuBotaoTutorial();
@@ -71,9 +71,9 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         configurarCamadaVitoria();
         configurarCamadaDerrota();
         configurarCamadaFinalDeJogo();
-    }    
-    
-    function iniciarJogo(gravidadeLigada) {    
+    }
+
+    function iniciarJogo(gravidadeLigada) {
         if(Model.obterEstadoDeJogo() != 'finalizado')
         {
             Model.ajustarGravidade(gravidadeLigada);
@@ -91,44 +91,45 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         else
             tratarFinalDoJogo();
     }
-    
+
     function colocarMatrizEmTela(matriz) {
+        //console.log("jogo:" + );
         $('.peca').remove();
-        
+
         var alturaDaAreaDasPecas = parseInt(areaDasPecas.css('height'));
         var larguraDaAreaDasPecas = parseInt(areaDasPecas.css('width'));
-        
+
         var alturaNecessariaParaPecas = altura * Model.obterNumeroDeLinhas();
         var larguraNecessariaParaPecas = largura * Model.obterNumeroDeColunas();
-        
+
         alturaQueSobraEmCima = (alturaDaAreaDasPecas - alturaNecessariaParaPecas)/2;
         larguraQueSobraADireita = (larguraDaAreaDasPecas - larguraNecessariaParaPecas)/2;
-                                                                              
+
         for (var i = 0; i < Model.obterNumeroDeLinhas(); i++)
         {
             for(var j = 0; j < Model.obterNumeroDeColunas(); j++)
             {
                 if(matriz[i][j] != null)
-                {    
-                $('<div>')
-                            .attr({'id': i + '-' + j, 'class': 'peca'})
-                            .css({ 'top': i * altura + alturaQueSobraEmCima, 'left': j * largura + larguraQueSobraADireita })
-                            .html('<div>' + matriz[i][j].texto + '</div>')
-                            .click(function () {
-                                selecionarPeca($(this));
-                            })
-                            .appendTo(areaDasPecas);
+                {
+                    $('<div>')
+                        .attr({'id': i + '-' + j, 'class': 'peca'})
+                        .css({ 'top': i * altura + alturaQueSobraEmCima, 'left': j * largura + larguraQueSobraADireita })
+                        .html('<div>' + matriz[i][j].texto + '</div>')
+                        .click(function () {
+                            selecionarPeca($(this));
+                        })
+                        .appendTo(areaDasPecas);
 
                 }
             }
         }
         MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
     }
-    
+
     function atualizar() {
         estadoDeJogo = Model.obterEstadoDeJogo();
 
-        if(estadoDeJogo == 'jogando') 
+        if(estadoDeJogo == 'jogando')
         {
             atualizarPontuacao();
             atualizarCronometro();
@@ -138,15 +139,18 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
             tratarFimDeJogo(estadoDeJogo);
         }
     }
-    
+
     function tratarFimDeJogo(estado) {
+        console.log(estado);
         switch (estado)
         {
             case 'perdeu':
+                sendData(Model.obterPontuacao(), Model.obterTempoRestante(), Model.obterNivel(), tabela.getGameSize(), Model.obterVitoria(), true);
                 clearInterval(invervaloDeAtualizacao);
                 fimDeJogoDerrota();
                 break;
             case 'venceu':
+                sendData(Model.obterPontuacao(), Model.obterTempoRestante(), Model.obterNivel(), tabela.getGameSize(), Model.obterVitoria(), true);
                 clearInterval(invervaloDeAtualizacao);
                 fimDeJogoVitoria();
                 break;
@@ -154,21 +158,23 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
                 setTimeout(function () {
                     tratarImpossibilidade();
                     Model.checarFimPorImpossibilidade();
-                }, 1000);                
+                }, 1000);
                 break;
             case 'finalizado':
+                sendData(Model.obterPontuacao(), Model.obterTempoRestante(), Model.obterNivel(), tabela.getGameSize(), Model.obterVitoria(), true);
+                console.log(' - - - - - -- - - - - - - -');
                 tratarFinalDoJogo();
                 break;
         }
     }
-    
+
     function tratarFinalDoJogo() {
         jogo.hide();
-        vitoria.hide();        
+        vitoria.hide();
         finalDeJogo.fadeIn();
         Model.tratarFinalDoJogo();
     }
-    
+
     function derrubarColuna(aPartirDaPeca, ateAPeca, coluna, velocidade) {
         //console.log(aPartirDaPeca, ateAPeca, aPartirDaPeca < ateAPeca)
         //console.log('tentou derrubar coluna: ' + coluna + ' a partir da peca: '+aPartirDaPeca+ 'ate a peca: ' + ateAPeca);swa
@@ -178,21 +184,21 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
             derrubarPeca(i, coluna, velocidade);
         }
     }
-    
+
     function derrubarPeca(linha, coluna, velocidade) {
         //console.log('derrubou peca da linha: '+ linha+ ' e da coluna: '+coluna);
-        elemento = $('#'+linha+'-'+coluna);        
+        elemento = $('#'+linha+'-'+coluna);
         linha = parseInt(linha) + parseInt(velocidade);
         elemento.attr('id', linha+'-'+coluna).css('top', linha * altura + alturaQueSobraEmCima);
     }
-    
+
     function atualizarPontuacao() {
         pontuacao.html('Pontuação: ' + Model.obterPontuacao());
 
         if(Model.obterPontuacao() >= Model.obterCustoDaDica())
         {
             if(dicaDesabilitada)
-                //Habilitamos o botao da dica
+            //Habilitamos o botao da dica
                 botaoDica.css('background-image', 'url("MahJong/imgs/botaoDica.png")');
 
             dicaDesabilitada = false;
@@ -200,13 +206,13 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         else
         {
             if(!dicaDesabilitada)
-                //Desabilitamos o botao dica
+            //Desabilitamos o botao dica
                 botaoDica.css('background-image', 'url("MahJong/imgs/botaoDicaDesabilitado.png")');
 
             dicaDesabilitada = true;
         }
     }
-    
+
     function atualizarCronometro() {
         tempo = Model.obterTempoRestante();
         minutos = parseInt(tempo/60);
@@ -224,20 +230,25 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         nivelAtual.html((Model.obterNivel() + 1).toString());
         nivelTotal.html((Model.obterNumeroDeNiveis() +1).toString());
     }
-    
-    function fimDeJogoVitoria() {    
+
+    function fimDeJogoVitoria() {
         clearInterval(invervaloDeAtualizacao);
         jogo.hide();
         vitoria.fadeIn();
     }
-    
+
     function fimDeJogoDerrota() {
+        console.log('----- derrota - - - - -- ');
+        console.log(Model.obterNivel());
+        console.log(Model.obterPontuacao());
+        console.log(Model.obterTempoRestante());
+        console.log(' - - - - - -- - - - - - - -');
         Model.sairJogo();
         clearInterval(invervaloDeAtualizacao);
         jogo.hide();
         derrota.fadeIn();
     }
-    
+
     function tratarImpossibilidade() {
         var vetorDeNovasPosicoes = Model.fazerPossivel();
 
@@ -254,29 +265,29 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
             $(this).attr('id', this.id.split('--')[0]+'-'+this.id.split('--')[1]);
         });
     }
-    
+
     function selecionarPeca(peca) {
-        
+
         pecasSelecionadas = $('.pecaSelecionada');
         if(pecasSelecionadas.length <= 1)
         {
             if((pecasSelecionadas.length == 1) && (peca[0] == pecasSelecionadas[0]))
             {
                 peca.removeClass('pecaSelecionada');
-            }                
+            }
             else
             {
                 peca.addClass('pecaSelecionada');
             }
         }
         pecasSelecionadas = $('.pecaSelecionada');
-        
+
         if(pecasSelecionadas.length > 1)
         {
             pos1 = pecasSelecionadas[0].id.split('-');
-            pos2 = pecasSelecionadas[1].id.split('-');        
+            pos2 = pecasSelecionadas[1].id.split('-');
             if(Model.tentarLigar(pos1, pos2))
-            {                
+            {
                 //Pecas ligaram, vou verificar se ele ja pode pedir dicas
                 if(Model.obterPontuacao() >= Model.obterCustoDaDica())
                 {
@@ -288,7 +299,7 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
                 $('.linha').fadeOut(500, function(){$('.linha').remove();});
 
                 $(pecasSelecionadas[0]).fadeOut(750);
-                $(pecasSelecionadas[1]).fadeOut(750, function() { 
+                $(pecasSelecionadas[1]).fadeOut(750, function() {
                     if(Model.obterGravidade())
                     {
                         pos1[0] = parseInt(pos1[0]);
@@ -303,20 +314,20 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
                             if(pos1[0] > pos2[0])
                             {
                                 derrubarColuna(pos1[0], pos2[0], pos1[1], 1);
-                                derrubarColuna(pos2[0], 0, pos2[1], 2);                            
+                                derrubarColuna(pos2[0], 0, pos2[1], 2);
                             }
                             //Se a peca um esta acima da peca dois
                             else
                             {
-                                derrubarColuna(pos2[0], pos1[0], pos2[1], 1);    
-                                derrubarColuna(pos1[0], 0, pos1[1], 2);                                                                            
+                                derrubarColuna(pos2[0], pos1[0], pos2[1], 1);
+                                derrubarColuna(pos1[0], 0, pos1[1], 2);
                             }
                         }
                         else
                         {
                             derrubarColuna(pos2[0], 0, pos2[1], 1);
                             derrubarColuna(pos1[0], 0, pos1[1], 1);
-                        }                        
+                        }
                     }
 
                     pecasSelecionadas.remove();
@@ -334,9 +345,6 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         var classeL, topL, leftL;
         var caminho = Model.obterCaminho();
 
-console.log(caminho)
-console.log(posicaoBase)
-
         for(var i = 1; i < caminho.length; i++)
         {
             if(caminho[i-1].x == caminho[i].x)
@@ -348,21 +356,21 @@ console.log(posicaoBase)
             else
             {
                 classe = "linha-vertical";
-                topL =    posicaoBase.top - altura + altura * (caminho[i].x+caminho[i-1].x)/2; 
+                topL =    posicaoBase.top - altura + altura * (caminho[i].x+caminho[i-1].x)/2;
                 leftL = posicaoBase.left - largura/2 + caminho[i].y * largura;
             }
 
             $('<div>')
-            .addClass('linha')
-            .addClass(classe)
-            .css({
-                'top': topL,
-                'left': leftL,
-            })
-            .appendTo('#areaDasPecas');
+                .addClass('linha')
+                .addClass(classe)
+                .css({
+                    'top': topL,
+                    'left': leftL,
+                })
+                .appendTo('#areaDasPecas');
         }
     }
-    
+
     //Configuracoes da camada menu
     function configurarMenuBotaoJogar() {
         $('#jogar.botaoMenu').click(function(){
@@ -370,7 +378,7 @@ console.log(posicaoBase)
             menuGravidade.fadeIn();
         });
     }
-    
+
     function configurarMenuBotaoCreditos() {
         $('#creditos.botaoMenu').click(function(){
             menu.hide();
@@ -378,7 +386,7 @@ console.log(posicaoBase)
             controleSom.hide();
         });
     }
-    
+
     function configurarMenuBotaoTutorial() {
         $('#tutorial.botaoMenu').click(function() {
             menu.hide();
@@ -403,7 +411,7 @@ console.log(posicaoBase)
 
     function proximoTutorial() {
         Tutorial.tutorialAtual++;
-        
+
         textoTutorial
             .fadeOut(500, function() {
                 $(this)
@@ -423,7 +431,7 @@ console.log(posicaoBase)
                     Model.continuarCronometro();
                     selecionarPeca($('#'+pecas[0].pos[0]+'-'+pecas[0].pos[1]));
                     Model.pausarCronometro();
-                }, 1000);            
+                }, 1000);
                 break;
             case 2:
                 pecas = Model.checarPossivelLigacao();
@@ -463,7 +471,7 @@ console.log(posicaoBase)
                 selecionarPeca($('#'+pecas[0].pos[0]+'-'+pecas[0].pos[1]));
                 selecionarPeca($('#'+pecas[1].pos[0]+'-'+pecas[1].pos[1]));
                 Model.pausarCronometro();
-                 break;
+                break;
             case 11:
                 jogo.hide();
                 tutorial.hide();
@@ -499,26 +507,26 @@ console.log(posicaoBase)
             iniciarJogo(true);
         });
     }
-    
+
     function configurarMenuBotaoSemGravidade() {
         $('#semGravidade.botaoMenu').click(function(){
             menuGravidade.hide();
-            menu.hide();            
+            menu.hide();
             jogo.fadeIn();
             iniciarJogo(false);
         });
     }
-    
+
     function configurarMenuBotaoVoltar() {
         $('#voltar.botaoMenu').click(function(){
             menuGravidade.hide();
             menuPrincipal.fadeIn();
         });
     }
-    
+
     //Configuracoes da camada jogo        
     function configurarJogoBotaoDica() {
-        
+
         $('#dica.botaoJogo').click(function (){
 
             pecas = Model.retornarPecasQueSeLigam();
@@ -532,10 +540,10 @@ console.log(posicaoBase)
                     peca1.removeClass('pecaDica');
                     peca2.removeClass('pecaDica');
                 }, 1000);
-            }            
-        });        
+            }
+        });
     }
-    
+
     function configurarJogoBotaoVoltar() {
         $('#voltar.botaoJogo').click(function(){
             Model.sairJogo();
@@ -545,21 +553,21 @@ console.log(posicaoBase)
             menuPrincipal.fadeIn();
         });
     }
-    
+
     function configurarJogoBotaoLembretes() {
         $('#lembretes.botaoJogo').click(function(){
             Model.pausarCronometro();
             $('#lembretes.popup').fadeIn();
         })
     }
-    
+
     function configurarJogoPopupLembretes() {
         $('#lembretes.popup').click(function() {
             $(this).hide();
-            Model.continuarCronometro();    
+            Model.continuarCronometro();
         })
     }
-    
+
     //Configuracoes da camada creditos
     function configurarCreditosBotaoVoltar() {
         $('#voltar.botaoCreditos').click(function(){
@@ -568,40 +576,40 @@ console.log(posicaoBase)
             controleSom.fadeIn();
         });
     }
-    
+
     //Configuracoes do controle de som
     function configurarSomBotaoSom() {
         $('#botaoSom')
-        .css('background', 'url("MahJong/imgs/botaoSom.png")')
-        .click(function(){
+            .css('background', 'url("MahJong/imgs/botaoSom.png")')
+            .click(function(){
                 mudo = !mudo;
                 if(mudo) {
-                        $(this).css('background', 'url("MahJong/imgs/botaoSemSom.png")');
-                        Audio.pausarSom();
+                    $(this).css('background', 'url("MahJong/imgs/botaoSemSom.png")');
+                    Audio.pausarSom();
                 }
                 else {
-                        $(this).css('background', 'url("MahJong/imgs/botaoSom.png")');
-                        Audio.iniciarSom();
-                }
-                        
-        });
-    }
-    
-    function configurarSomSlider() {
-            //Nem sei fazer isso
-            $('#slider').slider({
-                max: 100,
-                min: 0,
-                value: 100,
-            
-                create: function(event, ui) { 
+                    $(this).css('background', 'url("MahJong/imgs/botaoSom.png")');
                     Audio.iniciarSom();
-                },
-                change: function(event, ui) {
-                    Audio.ajustarVolumePara(ui.value/100);
-                },
-                
+                }
+
             });
+    }
+
+    function configurarSomSlider() {
+        //Nem sei fazer isso
+        $('#slider').slider({
+            max: 100,
+            min: 0,
+            value: 100,
+
+            create: function(event, ui) {
+                Audio.iniciarSom();
+            },
+            change: function(event, ui) {
+                Audio.ajustarVolumePara(ui.value/100);
+            },
+
+        });
     }
 
     //Configuracoes das camadas
@@ -613,7 +621,7 @@ console.log(posicaoBase)
             iniciarJogo(Model.obterGravidade());
         });
     }
-    
+
     function configurarCamadaDerrota() {
         derrota.click(function(){
             derrota.hide();
@@ -621,23 +629,23 @@ console.log(posicaoBase)
             menuGravidade.fadeIn();
         });
     }
-    
+
     function configurarCamadaFinalDeJogo() {
         finalDeJogo.click(function() {
             finalDeJogo.hide();
             menu.fadeIn();
             menuGravidade.hide();
-            menuPrincipal.show();        
+            menuPrincipal.show();
         });
     }
-    
-    return {        
+
+    return {
         iniciar: function ()
         {
             criarLayout();
             obterElementos();
             configuraEventos();
-        }    
+        }
     };
-    
+
 });

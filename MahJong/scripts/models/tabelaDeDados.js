@@ -1,6 +1,7 @@
 define(function()
 {
     var levels = [];
+    var fases;
 
     function GetSize(level) {
         return levels[level].size;
@@ -36,9 +37,9 @@ define(function()
             mimeType: "application/json",
             success: function(data) {
 
-                //data downloaded so we call parseJSON function 
+                //data downloaded so we call parseJSON function
                 //and pass downloaded data
-                var fases = $.parseJSON(data);
+                fases = $.parseJSON(data);
                 //now json variable contains data in json format
                 //let's display a few items
 
@@ -81,7 +82,7 @@ define(function()
      ["7+4", "10+7-6",   "11",  "21-10"]
      ]
      );
-     
+
      AddLevel(
      [4, 4],
      240,
@@ -92,7 +93,7 @@ define(function()
      [  "40-12", "14+14", "56/2",   "7*4"]
      ]
      );
-     
+
      AddLevel(
      [5, 4],
      300,
@@ -104,50 +105,50 @@ define(function()
      ["39/3",   "7+6", "2*6+1",  "20-7"]
      ]
      );
-     
+
      AddLevel(
      [6, 4],
      480,
      [
      [elev(2,2), "1+3", "2*2", raiz(16)],
-     ["3*2", "12/2", raiz(36), elev(2,2)+"+ 2"], 
+     ["3*2", "12/2", raiz(36), elev(2,2)+"+ 2"],
      ["7*2", "20-6", "28/2", "15-1"],
      ["5*4", raiz(400), "5*5-5", ""+elev(4,2)+"+"+elev(2,2)],
      ["8*2", elev(2,4), "3*5+1", "32/2"],
      ["5*5+2", elev(4,2)+"+11", "4*5+7", "54/2"]
      ]
      );
-     
+
      AddLevel(
      [5, 6],
      720,
      [
      [elev(3,1), "15/5", "22 - 19", raiz(27,3), raiz(9), "1 * 3"],
      [elev(3,2), "2*3+3", "3*3", "5+4", raiz(81), "27/3"],
-     ["10+9", "9*2+1", "50-31", "5*3+"+elev(2,2), elev(3,2)+"+2*5", 
+     ["10+9", "9*2+1", "50-31", "5*3+"+elev(2,2), elev(3,2)+"+2*5",
      elev(5,2)+"-2*3"],
-     ["11*2", raiz(484), elev(5,2)+"-"+elev(3,1), elev(4,2)+"+6", 
+     ["11*2", raiz(484), elev(5,2)+"-"+elev(3,1), elev(4,2)+"+6",
      "88/4", "32-2*5"],
-     ["48/2", raiz(576), "12*2", "72/3", "6 * "+elev(2,2), 
+     ["48/2", raiz(576), "12*2", "72/3", "6 * "+elev(2,2),
      elev(5,2)+"-"+elev(5,0)]
      ]
      );
-     
+
      AddLevel(
      [6, 6],
      1080,
      [
-     [raiz(16), elev(2,1) + " + 2", raiz(64,3), elev(2,2), 
+     [raiz(16), elev(2,1) + " + 2", raiz(64,3), elev(2,2),
      elev(2,1)+"+"+elev(2,1), "2*2"],
      [raiz(100), elev(3,2) + " + 1", "2*5", elev(2,2) + " + 6", elev(10,1),
      "30/3"],
-     [raiz(225), "5*3", elev(2,4) + " - 1", elev(2,3) + " + 7", 
+     [raiz(225), "5*3", elev(2,4) + " - 1", elev(2,3) + " + 7",
      elev(4,2)+"-"+elev(4,0), "90/6"],
-     [raiz(625), elev(5,2), "5*5", elev(4,2) + "+" + elev(3,2), 
+     [raiz(625), elev(5,2), "5*5", elev(4,2) + "+" + elev(3,2),
      "75/3", "12+13"],
-     ["13*2", raiz(676), elev(5,2)+"+"+elev(5,0), elev(6,2)+" - 10", 
+     ["13*2", raiz(676), elev(5,2)+"+"+elev(5,0), elev(6,2)+" - 10",
      "52/2", "30-4"],
-     [raiz(900), elev(5,2)+"+"+elev(5,1), elev(2,5)+" - 2", "90/3", 
+     [raiz(900), elev(5,2)+"+"+elev(5,1), elev(2,5)+" - 2", "90/3",
      "5*6", elev(4,2)+" + 14"]
      ]
      ); */
@@ -168,6 +169,9 @@ define(function()
         obterTexto: GetData,
         obterTempo: GetTime,
         obterTamanhoDoNivel: GetSize,
-        obterNumeroDeNiveis: GetNumberOfLevels
+        obterNumeroDeNiveis: GetNumberOfLevels,
+        getGameSize: function(){
+            return fases.length;
+        }
     };
 });

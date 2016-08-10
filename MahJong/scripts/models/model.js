@@ -1,41 +1,42 @@
-define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela) 
+define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 {
-	
-	var CUSTO_DA_DICA = 150, 
-	PONTOS_POR_ACERTO = 50, 
-	NUM_DE_LINHAS, 
-	NUM_DE_COLUNAS, 
-	matrizDePecas, 
-	tempoRestante, 
-	tempoDoNivel, 
-	pontuacao = 0, 
-	estadoDoJogo = "parado",  //venceu,  perdeu,  impossivel,  jogando,  parado,  pausado
-	gravidadeLigada, 
-	nivel = 0, 
-	cronometro;
+
+	var CUSTO_DA_DICA = 150,
+		PONTOS_POR_ACERTO = 50,
+		NUM_DE_LINHAS,
+		NUM_DE_COLUNAS,
+		matrizDePecas,
+		tempoRestante,
+		tempoDoNivel,
+		pontuacao = 0,
+		estadoDoJogo = "parado",  //venceu,  perdeu,  impossivel,  jogando,  parado,  pausado
+		gravidadeLigada,
+		nivel = 0,
+		cronometro,
+		vitoria;
 
 	/**
-	 * Essa função é chamada no começo do jogo é gera aleatoriamente a matriz com todas as peças do jogo
+	 * Essa funï¿½ï¿½o ï¿½ chamada no comeï¿½o do jogo ï¿½ gera aleatoriamente a matriz com todas as peï¿½as do jogo
 	 */
 	function gerarNovaMatriz()
 	{
 		NUM_DE_LINHAS  = tabela.obterTamanhoDoNivel(nivel)[0];
 		NUM_DE_COLUNAS = tabela.obterTamanhoDoNivel(nivel)[1];
-		
+
 		var i, j;
 		var vetorAuxiliarParaPegarTexto;
 		var vetorAuxiliarParaGerarMatrizAleatoria = new Array(NUM_DE_COLUNAS*NUM_DE_LINHAS);
 		var contador = 0;
 		var textosDoNivel = tabela.obterTexto(nivel);
 		var numeroDeGruposDoNivel = textosDoNivel.length;
-		
+
 		for(i=0; i<numeroDeGruposDoNivel; i++)
 		{
-			vetorAuxiliarParaPegarTexto = textosDoNivel[i]; 			
+			vetorAuxiliarParaPegarTexto = textosDoNivel[i];
 			for(j=0; j<vetorAuxiliarParaPegarTexto.length; j++)
 			{
 				vetorAuxiliarParaGerarMatrizAleatoria[contador] = {grupo:i,  texto:vetorAuxiliarParaPegarTexto[j]};
-				contador++; 				
+				contador++;
 			}
 		}
 
@@ -49,11 +50,11 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 				var aux2 = vetorAuxiliarParaGerarMatrizAleatoria.splice(aux, 1)[0];
 				var grupo = aux2.grupo;
 				var texto = aux2.texto;
-				
+
 				matrizDePecas[i][j] = {
-					pos:	[i,  j], 
-					id:		i * NUM_DE_LINHAS + j, 
-					valor:	grupo, 
+					pos:	[i,  j],
+					id:		i * NUM_DE_LINHAS + j,
+					valor:	grupo,
 					texto:	texto
 				};
 			}
@@ -61,10 +62,10 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 	}
 	function validarLigacao(peca1,  peca2,  trocarCaminho)
 	{
-		//Essa função é chamada para checar se as duas peças se ligam
+		//Essa funï¿½ï¿½o ï¿½ chamada para checar se as duas peï¿½as se ligam
 		if(peca1.valor == peca2.valor)
 		{
-			return checarConexao(peca1.pos,  peca2.pos,  trocarCaminho); 			
+			return checarConexao(peca1.pos,  peca2.pos,  trocarCaminho);
 		}
 		else
 			return false;
@@ -74,25 +75,26 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 		return checagem.verificar(matrizDePecas,  pos1,  pos2,  [NUM_DE_LINHAS,  NUM_DE_COLUNAS],  trocarCaminho);
 	}
 	function tratarPecasLigadas(peca1,  peca2)
-	{		
-		//Tiramos as peças da matriz
+	{
+		//Tiramos as peï¿½as da matriz
 		matrizDePecas[peca1.pos[0]].splice(peca1.pos[1], 1, null);
 		matrizDePecas[peca2.pos[0]].splice(peca2.pos[1], 1, null);
-		
+
 		pontuacao += PONTOS_POR_ACERTO;
-		
-		//Se tiver gravidade nós a aplicamos
+
+		//Se tiver gravidade nï¿½s a aplicamos
 		if(gravidadeLigada)
 		{
 			aplicarGravidade(peca1.pos);
 			aplicarGravidade(peca2.pos);
 		}
-		
+
 		if(checarFimPorVitoria())
 		{
 			if(nivel >= tabela.obterNumeroDeNiveis())
 			{
 				estadoDoJogo = 'finalizado';
+				vitoria = true;
 			}
 			else
 			{
@@ -109,7 +111,7 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 	}
 	function aplicarGravidade(pos)
 	{
-		var j = pos[1]; 	
+		var j = pos[1];
 		var acabou = false;
 		while(!acabou)
 		{
@@ -120,12 +122,12 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 				{
 					acabou = false;
 					matrizDePecas[i][j] = matrizDePecas[i-1][j];
-					matrizDePecas[i][j].pos[0] += 1;  //atualizamos a posição da peça na matriz
+					matrizDePecas[i][j].pos[0] += 1;  //atualizamos a posiï¿½ï¿½o da peï¿½a na matriz
 					matrizDePecas[i-1][j] = null;
 				}
 			}
 			pos[1]--;
-		}				
+		}
 	}
 
 	/**
@@ -174,11 +176,12 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 	}
 	function checarFinalDeJogo()
 	{
-		//Essa função checa se o jogo já acabou
-		//O jogo acaba quando não existem mais peças em jogo,  não existem mais ligações ou o tempo acabou
+		//Essa funï¿½ï¿½o checa se o jogo jï¿½ acabou
+		//O jogo acaba quando nï¿½o existem mais peï¿½as em jogo,  nï¿½o existem mais ligaï¿½ï¿½es ou o tempo acabou
 		if(checarFimPorTempo())
 		{
 			estadoDoJogo = "perdeu";
+			vitoria = false;
 			clearInterval(cronometro);
 			return true;
 		}else
@@ -198,7 +201,7 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 	}
 	function checarPossivelLigacao()
 	{
-		//algoritmo de checagem de combinação
+		//algoritmo de checagem de combinaï¿½ï¿½o
 		var i, j, x, y;
 		for ( i = NUM_DE_LINHAS -1; i >= 0; i-- )
 		{
@@ -216,7 +219,7 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 							else
 							{
 								var peca1 = matrizDePecas[i][j];
-								var peca2 = matrizDePecas[x][y]; 								
+								var peca2 = matrizDePecas[x][y];
 								if(validarLigacao(peca1,  peca2,  false))
 								{
 									return [peca1, peca2];
@@ -232,11 +235,11 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 	}
 	function reordenarMatriz()
 	{
-		var i, j; 		
+		var i, j;
 		var vetorPos = new Array();
 		var vetorPecas = new Array();
 		var vetorMudancas = new Array();
-			
+
 		for ( i = 0;  i < NUM_DE_LINHAS;  i++ )
 			for ( j = 0;  j < NUM_DE_COLUNAS;  j++ )
 				if ( matrizDePecas[i][j] != null )
@@ -244,23 +247,23 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 					vetorPos.push([i, j]);
 					vetorPecas.push(matrizDePecas[i].splice(j, 1, null)[0]);
 				}
-				
-		
+
+
 		for ( i = 0;  i < vetorPos.length;  i++ )
 		{
 			var x = vetorPos[i][0];
 			var y = vetorPos[i][1];
 			matrizDePecas[x][y] = vetorPecas.splice(Math.floor(Math.random()*vetorPecas.length), 1)[0];
-			var mudanca = {x0:matrizDePecas[x][y].pos[0],  y0:matrizDePecas[x][y].pos[1],  x1:vetorPos[i][0],  y1:vetorPos[i][1]}; 	
+			var mudanca = {x0:matrizDePecas[x][y].pos[0],  y0:matrizDePecas[x][y].pos[1],  x1:vetorPos[i][0],  y1:vetorPos[i][1]};
 			matrizDePecas[x][y].pos = vetorPos[i];
 			vetorMudancas.push(mudanca);
 		}
 
 		return vetorMudancas;
 	}
-	
-	
-	return		{	
+
+
+	return		{
 		checarFimPorImpossibilidade: function()
 		{
 			if(checarFimPorImpossibilidade())
@@ -271,22 +274,22 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 			{
 				return false;
 			}
-		}, 	
+		},
 		iniciarJogo:function()
-		{	
+		{
 			if(estadoDoJogo == "perdeu")
 				estadoDoJogo = 'parado';
-			
-			//Ajusta cronometro,  gera matriz,  incia pontuação
+
+			//Ajusta cronometro,  gera matriz,  incia pontuaï¿½ï¿½o
 			if(estadoDoJogo == "parado")
-			{				
+			{
 				resetarCronometro();
 				resetarPontuacao();
 				gerarNovaMatriz();
 				estadoDoJogo = "jogando";
-				cronometro = setInterval(atualizar,  1000); 				
+				cronometro = setInterval(atualizar,  1000);
 			}
-		}, 
+		},
 		obterNivel: function()
 		{
 			return nivel;
@@ -298,13 +301,14 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 		{
 			clearInterval(cronometro);
 			estadoDoJogo = "parado";
-			
+
 			if(nivel<tabela.obterNumeroDeNiveis())
 			{
 				nivel++;
 			}
 			else
 			{
+				console.log('else do finazalido');
 				estadoDoJogo = "finalizado";
 			}
 		},
@@ -315,15 +319,15 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 				estadoDoJogo = "jogando";
 				return reordenarMatriz();
 			}
-		}, 
+		},
 		sairJogo:function()
-		{			
+		{
 			estadoDoJogo = "parado";
 			nivel = 0;
 			clearInterval(cronometro);
-		}, 	
+		},
 		retornarPecasQueSeLigam: function ()
-		{			
+		{
 			if(pontuacao >= CUSTO_DA_DICA)
 			{
 				pontuacao -= CUSTO_DA_DICA;
@@ -331,18 +335,18 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 			}
 			else
 			{
-				
+
 				return false;
 			}
-		}, 
-		checarPossivelLigacao: checarPossivelLigacao, 
+		},
+		checarPossivelLigacao: checarPossivelLigacao,
 		tentarLigar: function(pos1,  pos2)
 		{
 			if(estadoDoJogo == 'jogando')
 			{
 				var peca1 = matrizDePecas[pos1[0]][pos1[1]];
 				var peca2 = matrizDePecas[pos2[0]][pos2[1]];
-				
+
 				if(validarLigacao(peca1,  peca2,  true))
 				{
 					tratarPecasLigadas(peca1,  peca2);
@@ -355,62 +359,65 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 			{
 				return false;
 			}
-		}, 
+		},
 		obterTempoDoNivel: function()
 		{
 			return tempoDoNivel;
-		}, 
+		},
+		obterVitoria: function () {
+			return vitoria;
+		},
 		obterTempoRestante:function()
 		{
 			return tempoRestante;
-		}, 
+		},
 		obterCaminho:function()
 		{
 			return checagem.obterCaminho();
-		}, 
+		},
 		obterPontuacao:function()
 		{
 			return pontuacao;
-		}, 
+		},
 		obterMatrizDePecas:function()
-		{			
+		{
 			return matrizDePecas;
-		}, 
+		},
 		obterEstadoDeJogo:function()
 		{
 			return estadoDoJogo;
-		}, 
+		},
 		obterNumeroDeLinhas: function()
 		{
 			return NUM_DE_LINHAS;
-		}, 
+		},
 		obterNumeroDeColunas: function()
 		{
 			return NUM_DE_COLUNAS;
-		}, 
+		},
 		obterCustoDaDica: function() {
 			return CUSTO_DA_DICA;
-		}, 
+		},
 		ajustarGravidade:function(valor)
 		{
 			gravidadeLigada = valor;
-		}, 	
+		},
 		obterGravidade: function()
 		{
 			return gravidadeLigada;
-		}, 
+		},
 		tratarFinalDoJogo: function()
 		{
 			nivel = 0;
 			estadoDoJogo = 'parado';
-		}, 
+		},
 		pausarCronometro: function() {
 			estadoDoJogo = 'pausado';
 			clearInterval(cronometro);
-		}, 
+		},
 		continuarCronometro: function() {
 			estadoDoJogo = 'jogando';
-			cronometro = setInterval(atualizar,  1000); 	
-		}, 
+			cronometro = setInterval(atualizar,  1000);
+		}
 	};
 }); 
