@@ -26,7 +26,25 @@ function sendData(points, remainingTime, levelId, gameSize, win, end){
             }
         })
     });
+}
 
-
-
+function sendRankingData(pontos){
+    var info = {};
+    var path;
+    if(window.location.hostname == "localhost" ){   // for localhost tests
+        path = "/exported-resource/saveScore"
+    }else {                                 // for web version in production, electron and crosswalk versions
+        path = "http://remar.dc.ufscar.br/exported-resource/saveScore"
+    }
+    $.getJSON("remar.json", function(json) {
+        info.exportedResourceId = json.exportedResourceId;
+        info.score = pontos;
+        $.ajax({
+            type: "POST",
+            url: path,
+            data: info,
+            success: function(data) {
+            }
+        })
+    });
 }

@@ -146,12 +146,15 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
         {
             case 'perdeu':
                 sendData(Model.obterPontuacao(), Model.obterTempoRestante(), Model.obterNivel(), tabela.getGameSize(), Model.obterVitoria(), true);
+                sendRankingData(Model.obterPontuacao());
                 clearInterval(invervaloDeAtualizacao);
                 fimDeJogoDerrota();
                 break;
             case 'venceu':
+                Model.ajustarPontuacao(Model.obterTempoRestante());
                 sendData(Model.obterPontuacao(), Model.obterTempoRestante(), Model.obterNivel(), tabela.getGameSize(), Model.obterVitoria(), true);
                 clearInterval(invervaloDeAtualizacao);
+                //jogo ainda nao acabou
                 fimDeJogoVitoria();
                 break;
             case 'impossivel':
@@ -161,7 +164,9 @@ define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './mo
                 }, 1000);
                 break;
             case 'finalizado':
+                Model.ajustarPontuacao(Model.obterTempoRestante());   
                 sendData(Model.obterPontuacao(), Model.obterTempoRestante(), Model.obterNivel(), tabela.getGameSize(), Model.obterVitoria(), true);
+                sendRankingData(Model.obterPontuacao());
                 console.log(' - - - - - -- - - - - - - -');
                 tratarFinalDoJogo();
                 break;

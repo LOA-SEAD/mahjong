@@ -291,7 +291,7 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 				estadoDoJogo = "jogando";
 				cronometro = setInterval(atualizar,  1000);
 			}
-		},
+		}, 
 		obterNivel: function()
 		{
 			return nivel;
@@ -403,6 +403,10 @@ define(["./checagemLigacao2",  "./tabelaDeDados"],  function (checagem,  tabela)
 		ajustarGravidade:function(valor)
 		{
 			gravidadeLigada = valor;
+		},
+                ajustarPontuacao:function(valor)
+		{
+			pontuacao += valor;
 		},
 		obterGravidade: function()
 		{
