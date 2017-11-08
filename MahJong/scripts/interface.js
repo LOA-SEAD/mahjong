@@ -1,4 +1,4 @@
-define(['jquery', 'ui', '../utils/audio', 'text!../templates/layout.html', './models/model', './tutorial/tutorial', './models/tabelaDeDados'], function ($, Ui, Audio, Layout, Model, Tutorial, tabela) {
+define(['ui', '../utils/audio', 'text!../templates/layout.html', './models/model', './tutorial/tutorial', './models/tabelaDeDados'], function ($, Audio, Layout, Model, Tutorial, tabela) {
 
     var menu,
         menuPrincipal,

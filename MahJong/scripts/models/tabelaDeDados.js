@@ -1,4 +1,4 @@
-define(function()
+define(['ui'], function($)
 {
     var levels = [];
     var fases;

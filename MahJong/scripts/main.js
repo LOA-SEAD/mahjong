@@ -1,11 +1,22 @@
 ﻿require.config({
+
+    deps: ["main"],
+
     paths: {
-        "jquery": "./libs/jquery-1.8.1",
-		"ui": "./libs/jquery.ui",
+        "jquery": "./libs/jquery-3.2.1",
+		"ui": "./libs/jquery.ui"
+    },
+
+    shim: {
+    	"ui": {
+            exports: "$",
+            deps: ['jquery']
+    	}
     }
+
 });
 
-require(['jquery', 'interface'], function ($, Interface) {
+require(['ui', 'interface'], function ($, Interface) {
     $(document).ready(function () {
 		Interface.iniciar();
     });
