@@ -1,5 +1,5 @@
 
-function sendData(points, remainingTime, levelId, gameSize, win, end){
+function sendData(points, remainingTime, challengeId, gameSize, win, end){
     var info = {};
     var path;
     if(window.location.hostname == "localhost" ){   // for localhost tests
@@ -13,7 +13,7 @@ function sendData(points, remainingTime, levelId, gameSize, win, end){
         info.points = points.toFixed(0);
         info.partialPoints = points.toFixed(0);
         info.remainingTime = remainingTime;
-        info.levelId = levelId;
+        info.challengeId = challengeId;
         info.win = win;
         info.size = gameSize;
         info.end = end;
